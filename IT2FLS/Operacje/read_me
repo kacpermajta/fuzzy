@@ -1,0 +1,47 @@
+NEW:
+Type-reduction for Interval Type-2 Fuzzy Logic Systems
+
+Queries about the software can be made to "qilian@sipi.usc.edu".
+
+Copyright (c) 2001 by the University of Southern California. 
+All rights reserved.
+
+This software is experimental in nature and is provided on an "as is" 
+basis only. The University SPECIFICALLY DISCLAIMS ALL WARRANTIES 
+INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF MERCHANTABILITY 
+AND FITNESS FOR A PARTICULAR PURPOSE.
+
+This software may be used for non-commercial purposes only, so long as 
+this copyright notice is reproduced with each such copy made.
+
+The software in this folder focuses on the type-reduction for interval type-2 FLSs.
+
+Each M-file is keyed into a section of Chapter 9 of the book Uncertain Rule-Based 
+Fuzzy Logic Systems: Introduction and New Directions, by Jerry M. Mendel, 
+and published by Prentice-Hall, 2000. 
+
+These M-files were prepared after the book was published and so are not mentioned 
+in that book. They were created in order to simplify the programming of 
+type-reduction methods by the designer.
+
+
+Description of M-files
+
+Here we provide brief descriptions of the M-files that appear in this folder. 
+For more help on any specific file, type 
+help (filename) at MATLAB prompt.
+
+centroid_tr.m: Function used to implement the centroid type-reduction method 
+that is described in Section 9.5.1 of the book.
+
+csum_tr.m: Function used to implement the center-of-sums  type-reduction method 
+that is described in Section 9.5.2 of the book.
+
+height_tr.m: Function used to implement the height  type-reduction method that 
+is described in Section 9.5.3 of the book.
+
+md_height_tr.m: Function used to implement the modified height  type-reduction 
+method that is described in Section 9.5.4 of the book.
+
+cos_tr.m: Function used to implement the center-of-sets  type-reduction method 
+that is described in Section 9.5.5 of the book.

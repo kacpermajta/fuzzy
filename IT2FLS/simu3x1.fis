@@ -1,0 +1,46 @@
+[System]
+Name='simu3x1'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=6
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='wejscie1'
+Range=[0 1]
+NumMFs=5
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+MF4='mf4':'gaussmftype2',[0.21 0.1 0.21 0.26]
+MF5='mf5':'gaussmftype2',[0.21 0.74 0.21 0.9]
+
+[Input2]
+Name='wejscie2'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+
+[Output1]
+Name='wyjscie1'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+
+[Rules]
+1 1, 1 (1) : 1
+2 1, 1 (1) : 1
+3 1, 2 (1) : 1
+3 2, 2 (1) : 1
+5 2, 2 (1) : 1
+5 3, 3 (1) : 1

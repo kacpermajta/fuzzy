@@ -1,0 +1,39 @@
+[System]
+Name='bez_nazwy'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=1
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='wejscie1'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+
+[Input2]
+Name='wejscie2'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+
+[Output1]
+Name='wyjscie1'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'gaussmftype2',[0.21 -0.08 0.21 0.08]
+MF2='mf2':'gaussmftype2',[0.21 0.42 0.21 0.58]
+MF3='mf3':'gaussmftype2',[0.21 0.92 0.21 1.08]
+
+[Rules]
+1 1, 1 (1) : 1

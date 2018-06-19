@@ -1,0 +1,47 @@
+[System]
+Name='simu2x1_fuzzytype'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=5
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='uchyb'
+Range=[-1 1]
+NumMFs=5
+MF1='duzy_ujemny':'trimf',[-2 -1 -0.5]
+MF2='maly_ujemny':'trimf',[-1 -0.5 0]
+MF3='zero':'trapmf',[-0.5 -0.045 0.055 0.5]
+MF4='maly_dodatni':'trimf',[0 0.5 1]
+MF5='duzy_dodatni':'trimf',[0.5 1 1.5]
+
+[Input2]
+Name='calka_uchybu'
+Range=[-1 1]
+NumMFs=3
+MF1='ujemna':'trimf',[-2 -1 -0]
+MF2='zerowa':'trimf',[-1 0 1]
+MF3='dodatnia':'trimf',[0 1 2]
+
+[Output1]
+Name='output1'
+Range=[-1 1]
+NumMFs=5
+MF1='duzy_ujemne':'trimf',[-2 -1 -0.5]
+MF2='maly_ujemne':'trimf',[-1 -0.5 0]
+MF3='zerowe':'trapmf',[-0.5 -0.045 0.055 0.5]
+MF4='male_dodatnie':'trimf',[0.00529100529100512 0.505291005291005 1.00529100529101]
+MF5='duze_dodatnie':'trimf',[0.505291005291005 1.00529100529101 1.50529100529101]
+
+[Rules]
+1 1, 1 (1) : 1
+2 1, 2 (1) : 1
+3 2, 3 (1) : 1
+4 3, 4 (1) : 1
+5 3, 5 (1) : 1

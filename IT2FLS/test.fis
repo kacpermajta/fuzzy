@@ -1,0 +1,43 @@
+[System]
+Name='test'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=5
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='input1'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'igaussmtype2',[0.212330450072005 -0.0833333333333333 0.0833333333333333]
+MF2='mf2':'igaussmtype2',[0.212330450072005 0.416666666666667 0.583333333333333]
+MF3='mf3':'igaussmtype2',[0.212330450072005 0.916666666666667 1.08333333333333]
+
+[Input2]
+Name='input2'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'igaussmtype2',[0.212330450072005 -0.0833333333333333 0.0833333333333333]
+MF2='mf2':'igaussmtype2',[0.212330450072005 0.416666666666667 0.583333333333333]
+MF3='mf3':'igaussmtype2',[0.212330450072005 0.916666666666667 1.08333333333333]
+
+[Output1]
+Name='output1'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'igaussmtype2',[0.212330450072005 -0.0833333333333333 0.0833333333333333]
+MF2='mf2':'igaussmtype2',[0.212330450072005 0.416666666666667 0.583333333333333]
+MF3='mf3':'igaussmtype2',[0.212330450072005 0.916666666666667 1.08333333333333]
+
+[Rules]
+1 2, 3 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1
+1 1, 1 (1) : 1
+3 2, 1 (1) : 1
