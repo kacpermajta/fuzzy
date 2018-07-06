@@ -578,7 +578,7 @@ glowne_CloseRequestFcn(hObject, eventdata, handles);
 %%%%% Zamykanie Gui
 %%%%% Executes when user attempts to close glowne.
 function glowne_CloseRequestFcn(hObject, eventdata, handles)
-selection = questdlg('Czy chcesz zapisaæ przebieg pracy?','Close Request Function','Tak','Nie','Anuluj','Anuluj');
+selection = questdlg('Czy chcesz zapisac przebieg pracy?','Close Request Function','Tak','Nie','Anuluj','Anuluj');
 nazwa = handles.nazwa;
 fls = readfis(nazwa);
     switch selection

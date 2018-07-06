@@ -1,0 +1,75 @@
+[System]
+Name='SMA_fuzzy2'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=21
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='zadana'
+Range=[0 12]
+NumMFs=3
+MF1='mf1':'trisymmftype2',[-6 -5.5 0]
+MF2='mf2':'trisymmftype2',[0 0.5 6]
+MF3='mf3':'trisymmftype2',[6 6.5 12]
+
+[Input2]
+Name='uchyb'
+Range=[-12 12]
+NumMFs=7
+MF1='mf1':'trisymmftype2',[-22.2 -22 -12]
+MF2='mf2':'trisymmftype2',[-2 -1.8 -1.25]
+MF3='mf3':'trisymmftype2',[-1 -0.8 -0.5]
+MF4='mf4':'trisymmftype2',[-0.5 -0.3 0]
+MF5='mf5':'trisymmftype2',[0 0.2 0.5]
+MF6='mf6':'trisymmftype2',[0.5 0.7 1.25]
+MF7='mf7':'trisymmftype2',[1.8 2 12]
+
+[Output1]
+Name='wyjscie'
+Range=[0 100]
+NumMFs=15
+MF1='mf1':'trisymmftype2',[-10.1 -10 -5]
+MF2='mf5':'trisymmftype2',[16.5 17 18.5]
+MF3='mf6':'trisymmftype2',[26.5 27 28.5]
+MF4='mf7':'trisymmftype2',[27.5 28 29.5]
+MF5='mf8':'trisymmftype2',[31.25 31.75 33.25]
+MF6='mf10':'trisymmftype2',[55.5 56 57.5]
+MF7='mf11':'trisymmftype2',[54.25 54.75 56.25]
+MF8='mf12':'trisymmftype2',[52.5 53 54.5]
+MF9='mf13':'trisymmftype2',[68.5 69 70.5]
+MF10='mf14':'trisymmftype2',[72.5 73 74.5]
+MF11='mf15':'trisymmftype2',[74.75 75.25 76.75]
+MF12='mf17':'trisymmftype2',[84.25 84.75 86.25]
+MF13='mf19':'trisymmftype2',[96 96.5 98]
+MF14='mf20':'trimftype2',[90 95 95.1 94.9 95 100.01]
+MF15='mf21':'trisymmftype2',[99.9 100.09 101]
+
+[Rules]
+1 1, 1 (1) : 1
+1 2, 2 (1) : 1
+1 3, 3 (1) : 1
+1 4, 6 (1) : 1
+1 5, 7 (1) : 1
+1 6, 8 (1) : 1
+1 7, 15 (1) : 1
+2 1, 1 (1) : 1
+2 2, 4 (1) : 1
+2 3, 5 (1) : 1
+2 4, 9 (1) : 1
+2 5, 10 (1) : 1
+2 6, 11 (1) : 1
+2 7, 15 (1) : 1
+3 1, 1 (1) : 1
+3 2, 5 (1) : 1
+3 3, 8 (1) : 1
+3 4, 12 (1) : 1
+3 5, 13 (1) : 1
+3 6, 14 (1) : 1
+3 7, 15 (1) : 1

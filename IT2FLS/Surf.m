@@ -589,7 +589,7 @@ end
                                             min_dolna = min_gorna;
                                             min_gorna = temp;
                                         end
-                                    [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
+                                    [X_ob(i,:), Y_ob(i,:)] = min_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
 
 
                                     %wpisanie do macierzy wynikow przed skalowaniem

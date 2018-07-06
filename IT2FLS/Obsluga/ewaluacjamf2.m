@@ -482,7 +482,6 @@ switch nazwa
                 b2  = parametry(3);   
             case 4
                % parametry = sort(parametry);
-                parametry=sort(parametry);
                 a1 = parametry(1);
                 b1 = parametry(2);
                 a2  = parametry(3);
@@ -527,7 +526,7 @@ switch nazwa
                 b2  = parametry(3);   
             case 4
                % parametry = sort(parametry);
-                parametry=sort(parametry);
+%                 parametry=sort(parametry);
                 a1 = parametry(1);
                 b1 = parametry(2);
                 a2  = parametry(3);

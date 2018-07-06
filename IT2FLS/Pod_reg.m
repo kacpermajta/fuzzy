@@ -208,11 +208,11 @@ set(gcf,'Color',[0.73 0.83 0.96]);
         if IleWejsc == 1
             set(handles.wej1_wart,'Enable','On');
             set(handles.text_we1,'Enable','On');
-            set(handles.wej2_wart,'Enable','Off');
+            set(handles.wej2_wart,'Enable','Off','Visible','Off');
             set(handles.text_we2,'Enable','Off');           
-            set(handles.wej3_wart,'Enable','Off');
+            set(handles.wej3_wart,'Enable','Off','Visible','Off');
             set(handles.text_we3,'Enable','Off');         
-            set(handles.wej4_wart,'Enable','Off');
+            set(handles.wej4_wart,'Enable','Off','Visible','Off');
             set(handles.text_we4,'Enable','Off'); 
             %ustawienie zakresow sliderow
             zakres1 = fls.input(1).range(1);            
@@ -225,13 +225,13 @@ set(gcf,'Color',[0.73 0.83 0.96]);
              
         elseif IleWejsc == 2 
 
-            set(handles.wej1_wart,'Enable','On');
+            set(handles.wej1_wart,'Enable','On','Visible','On');
             set(handles.text_we1,'Enable','On');
-            set(handles.wej2_wart,'Enable','On');
+            set(handles.wej2_wart,'Enable','On','Visible','On');
             set(handles.text_we2,'Enable','On');           
-            set(handles.wej3_wart,'Enable','Off');
+            set(handles.wej3_wart,'Enable','Off','Visible','Off');
             set(handles.text_we3,'Enable','Off');         
-            set(handles.wej4_wart,'Enable','Off');
+            set(handles.wej4_wart,'Enable','Off','Visible','Off');
             set(handles.text_we4,'Enable','Off');  
             %ustawienie zakresow sliderow
             zakres1 = fls.input(1).range(1);            
@@ -251,13 +251,13 @@ set(gcf,'Color',[0.73 0.83 0.96]);
       
         elseif IleWejsc == 3
              %ustawienie enable siderow
-            set(handles.wej1_wart,'Enable','On');
+            set(handles.wej1_wart,'Enable','On','Visible','On');
             set(handles.text_we1,'Enable','On');
-            set(handles.wej2_wart,'Enable','On');
+            set(handles.wej2_wart,'Enable','On','Visible','On');
             set(handles.text_we2,'Enable','On');           
-            set(handles.wej3_wart,'Enable','On');
+            set(handles.wej3_wart,'Enable','On','Visible','On');
             set(handles.text_we3,'Enable','On');         
-            set(handles.wej4_wart,'Enable','Off');
+            set(handles.wej4_wart,'Enable','Off','Visible','Off');
             set(handles.text_we4,'Enable','Off'); 
             %ustawienie zakresow sliderow
             zakres1 = fls.input(1).range(1);            
@@ -284,13 +284,13 @@ set(gcf,'Color',[0.73 0.83 0.96]);
 
         else
             %ustawienie enable siderow
-            set(handles.wej1_wart,'Enable','On');
+            set(handles.wej1_wart,'Enable','On','Visible','On');
             set(handles.text_we1,'Enable','On');
-            set(handles.wej2_wart,'Enable','On');
+            set(handles.wej2_wart,'Enable','On','Visible','On');
             set(handles.text_we2,'Enable','On');           
-            set(handles.wej3_wart,'Enable','On');
+            set(handles.wej3_wart,'Enable','On','Visible','On');
             set(handles.text_we3,'Enable','On');         
-            set(handles.wej4_wart,'Enable','On');
+            set(handles.wej4_wart,'Enable','On','Visible','On');
             set(handles.text_we4,'Enable','On');             
             %ustawienie zakresow sliderow
             zakres1 = fls.input(1).range(1);            

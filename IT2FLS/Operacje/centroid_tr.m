@@ -15,7 +15,7 @@
 %% and "w" and "delta" are  
 %% N-vectors containing the centers and spreads of the membership degrees 
 %% of each sampling point. 
-
+% Uncertain Rule-Based Fuzzy Logic Systems: Introduction and New Directions
 function [l_out,r_out]=centroid_tr(z,w,delta)
 
 L=length(z);
