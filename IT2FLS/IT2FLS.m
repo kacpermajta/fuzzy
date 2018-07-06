@@ -578,7 +578,6 @@ glowne_CloseRequestFcn(hObject, eventdata, handles);
 %%%%% Zamykanie Gui
 %%%%% Executes when user attempts to close glowne.
 function glowne_CloseRequestFcn(hObject, eventdata, handles)
-selection = questdlg('Czy chcesz zapisac przebieg pracy?','Close Request Function','Tak','Nie','Anuluj','Anuluj');
 nazwa = handles.nazwa;
 fls = readfis(nazwa);
     switch selection
@@ -729,3 +728,55 @@ function general_on_Callback(hObject, eventdata, handles)
         end
          guidata(hObject,handles);
          
+
+
+% --- Executes during object creation, after setting all properties.
+function glowne_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to glowne (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on selection change in popupmenu10.
+function popupmenu10_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu10 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu10
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu10_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+list = dir('metody_redukcji');
+names = {list.name};
+names = names(3:end);
+clear list;
+
+set(hObject, 'String', names);
+
+handles.names = names;
+guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton13.
+function pushbutton13_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+index = get(handles.popupmenu10, 'Value');
+list = handles.names;
+name = list{index};
+
+copyfile(strcat('metody_redukcji\', name), 'Operacje\adapt.m');
