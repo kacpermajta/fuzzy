@@ -1,3 +1,4 @@
+
 function varargout = Surf(varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Surf
@@ -179,6 +180,8 @@ handles.output = hObject;
 nazwa = handles.nazwa;
 fls = readfis(nazwa);
 zslices_num = handles.zslices; 
+IleWejsc = length(fls.input);
+IleWyjsc = length(fls.output);
 if ~isempty(fls.rule)
  %%%%%%Tworzenie g³ównego AXES 
     
@@ -198,10 +201,14 @@ if ~isempty(fls.rule)
         'Color', axCol );
     
         
-        IleWejsc = length(fls.input);
-        IleWyjsc = length(fls.output);
-        KtWejscie1 = get(handles.wejscie_1_wybor,'Value');
-        KtWejscie2 = get(handles.wejscie_2_wybor,'Value');    
+        if length(fls.input) > 2  
+                KtWejscie1 = get(handles.wejscie_1_wybor,'Value');
+                KtWejscie2 = get(handles.wejscie_2_wybor,'Value');    
+        else
+                KtWejscie1 = 1;
+                KtWejscie2 = 2;   
+        end
+
         KtWyjscie = get(handles.wyjscie_wybor,'Value');
 %%%%%Parametry figure
 set(gcf,'Color',[0.73 0.83 0.96]);
@@ -412,71 +419,136 @@ end
                                             mf_dolna2(i,:) = dolna;
 
                                             mf_gorna2(i,:) = gorna;
+                                            
+                                if strcmp(fls.type, 'mamdani')
+%mamdami
+                                    wy1 = fls.rule(i).consequent(KtWyjscie);
+                                    typ = fls.output(KtWyjscie).mf(wy1).type;
+
+                                               %funkcja przynaleznosci - rys          
+                                               parametr = fls.output(KtWyjscie).mf(wy1).params;
+
+                                               [dolna,gorna] = feval(typ,wy1x,parametr);
+                                               mf_dolna_wyj(i,:) = dolna;
+                                               mf_gorna_wyj(i,:) = gorna;
+
+                                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%POPRAWIONE 
+                            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                            %Obliczenia fls2
+                                    %warunki wybierajace odpowiednie pliki obliczajace
+                                    if strcmp(fls.andMethod,'min')
+                                        [min_dolna(i,:), min_gorna(i,:)] = min_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+                                            if min_dolna > min_gorna
+                                                temp = min_dolna;
+                                                min_dolna = min_gorna;
+                                                min_gorna = temp;
+                                            end
+                                            
+                                            
+                                        [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
 
 
-                                wy1 = fls.rule(i).consequent(KtWyjscie);
-                                typ = fls.output(KtWyjscie).mf(wy1).type;
-
-                                           %funkcja przynaleznosci - rys          
-                                           parametr = fls.output(KtWyjscie).mf(wy1).params;
-
-                                           [dolna,gorna] = feval(typ,wy1x,parametr);
-                                           mf_dolna_wyj(i,:) = dolna;
-                                           mf_gorna_wyj(i,:) = gorna;
-
-                            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%POPRAWIONE 
-                        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                        %Obliczenia fls2
-
-
-                                %warunki wybierajace odpowiednie pliki obliczajace
-                                if strcmp(fls.andMethod,'min')
-                                    [min_dolna(i,:), min_gorna(i,:)] = min_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
-                                        if min_dolna > min_gorna
-                                            temp = min_dolna;
-                                            min_dolna = min_gorna;
-                                            min_gorna = temp;
-                                        end
-                                    [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
-
-
-                                    %wpisanie do macierzy wynikow przed skalowaniem
-
-
-
-
-                                elseif strcmp(fls.andMethod,'prod')
-                                    [prod_dolna(i,:), prod_gorna(i,:)] =   prod_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
-                                        if prod_dolna > prod_gorna
-                                                temp = prod_dolna;
-                                                prod_dolna = prod_gorna;
-                                                prod_gorna = temp;
-                                        end
-                                    [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, prod_dolna(i,:), prod_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
+                                        %wpisanie do macierzy wynikow przed skalowaniem
 
 
 
-                                end %koniec andmethod == min 
-                    end
-                            if strcmp(fls.aggMethod,'max')
+
+                                    elseif strcmp(fls.andMethod,'prod')
+                                        [prod_dolna(i,:), prod_gorna(i,:)] =   prod_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+                                            if prod_dolna > prod_gorna
+                                                    temp = prod_dolna;
+                                                    prod_dolna = prod_gorna;
+                                                    prod_gorna = temp;
+                                            end
+                                        [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, prod_dolna(i,:), prod_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
+
+
+
+                                    end %koniec andmethod == min 
+
+%koniec mamdani
+                                else
+%sugeno
+                                    wy1 = fls.rule(i).consequent(KtWyjscie);
+                                    typ = linear;
+
+                                               %funkcja przynaleznosci - rys          
+                                    parametr = fls.output(KtWyjscie).mf(wy1).params;
+
+                                    x1Sg=we1x(j);
+                                    x2Sg=we2x(k);
+
+                                    if strcmp(fls.andMethod,'min')
+                                        [wart_dolna(i,:), wart_gorna(i,:)] = min_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+                                        %wpisanie do macierzy wynikow przed skalowaniem
+
+                                    elseif strcmp(fls.andMethod,'prod')
+                                        [wart_dolna(i,:), wart_gorna(i,:)] =   prod_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+
+                                    end %koniec andmethod == min 
+                                    if wart_dolna > wart_gorna
+                                        temp = wart_dolna;
+                                        wart_dolna = wart_gorna;
+                                        wart_gorna = temp;
+                                    end
+
+
+                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(1)*x1Sg+ parametr(2)*x2Sg;
+
+                                        
+                                    
+                                end
+
+
+                       end
+                    
+                            if strcmp(fls.type, 'sugeno')
                                 if IleReg == 1
-                                    x_do_wyj = X_ob;
-                                    y_do_wyj = Y_ob;
+                                    l_out = Z_ob;
+                                    r_out = Z_ob;
                                 else
-                                    [Xagg_ob, Yagg_ob] = max_agg(X_ob,Y_ob);
-                                    x_do_wyj = Xagg_ob;
-                                    y_do_wyj = Yagg_ob;
+                                    
+                                    
+                                    [Xagg_ob, Yagg_ob] = sug_agg(Z_ob,wart_dolna,wart_gorna);
+                                    l_out = Xagg_ob;
+                                    r_out = Yagg_ob;
+                                    
+                                    
+                                    
+                                    
                                 end
-                            elseif strcmp(fls.aggMethod,'probor')
-                                 if IleReg == 1
-                                    x_do_wyj = X_ob;
-                                    y_do_wyj = Y_ob;
-                                else
-                                    [Xagg_ob, Yagg_ob] = probor_agg(X_ob,Y_ob);
-                                    x_do_wyj = Xagg_ob;
-                                    y_do_wyj = Yagg_ob;
+                                
+                                
+                            else
+                                
+                                if strcmp(fls.aggMethod,'max')
+                                    if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = max_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
+                                elseif strcmp(fls.aggMethod,'probor')
+                                     if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = probor_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
+                                elseif strcmp(fls.aggMethod,'sum')
+                                     if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = sum_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
                                 end
-                            end
 
                  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -507,7 +579,7 @@ end
                                 %okreslenei wartosci
 
                                         [l_out, r_out] = feval(point_fcn,z,w,delta);
-
+                            end
                                     %zapewnienie warunku ze przy niektorych
                                     %danych wartosc out zawsze jest srodkowa
                                     %wartoscia 0.5
@@ -580,7 +652,7 @@ end
                         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                         %Obliczenia fls2
 
-
+%Regu³y
                                 %warunki wybierajace odpowiednie pliki obliczajace
                                 if strcmp(fls.andMethod,'min')
                                     [min_dolna(i,:), min_gorna(i,:)] = min_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
@@ -613,7 +685,7 @@ end
                             
 
 
-
+%Agregacja
                             if strcmp(fls.aggMethod,'max')
                                 if IleReg == 1
                                     x_do_wyj = X_ob;
@@ -632,10 +704,19 @@ end
                                     x_do_wyj = Xagg_ob;
                                     y_do_wyj = Yagg_ob;
                                 end
+                            elseif strcmp(fls.aggMethod,'sum')
+                                 if IleReg == 1
+                                    x_do_wyj = X_ob;
+                                    y_do_wyj = Y_ob;
+                                else
+                                    [Xagg_ob, Yagg_ob] = sum_agg(X_ob,Y_ob);
+                                    x_do_wyj = Xagg_ob;
+                                    y_do_wyj = Yagg_ob;
+                                end
                             end
 
                  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%defuzyfikacja
                             %wybor metody defuzzyfikacji
                             %pobranie wart. wyboru  DOEDYCJI
                             %tworzenie danych potrzebnych do defuzzyfikacji

@@ -608,8 +608,17 @@ switch nazwa
 
          gorna = y1;
          dolna = y2; 
-    
-
+    case 'linearmftype2'
+        switch parnum 
+            case 5
+                a1=paramety(1);
+                a2=paramety(2);
+                a3=paramety(3);
+                a4=paramety(4);
+                a0=paramety(5);
+               
+            case 10
+                
         
 end
 %warunki sprawdzajace czy dolna to czasem nie gorna

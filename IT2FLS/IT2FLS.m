@@ -96,7 +96,7 @@ end
         fls = varargin;
          %%%%%Wypisanie w polach - nazwa fis i typ fis prawdziwych danych
     set(handles.naz_fis_txt,'String',nazwa);
-    set(handles.typ_fis_txt,'String',fls.type);
+%    set(handles.typ_fis_txt,'String',fls.type);
   
 %ilosc zsclices
             handles.zslices = 0;
@@ -110,6 +110,13 @@ end
    
     fls.andMethod = str;
    
+%%%%%typ_fis_txt %KVM
+    temp_val = get(handles.typ_fis_txt,'Value');
+    temp_str = get(handles.typ_fis_txt,'String');
+    str = temp_str{temp_val};
+   
+    fls.type = str;
+    
  %%%%%met_il_pop
     temp_val = get(handles.met_il_pop,'Value');
     temp_str = get(handles.met_il_pop,'String');
@@ -168,6 +175,13 @@ end
         set(handles.naz_fis_txt,'String','');
         %ustawianie wartosci okienek 
         set(handles.naz_fis_txt,'String',handles.nazwa);
+        
+        %typ_fis_txt %KVM
+        temp_str = get(handles.typ_fis_txt,'String');
+        I = strcmp(fls.type,temp_str);
+        ind = find(I);
+        set(handles.typ_fis_txt,'Value',ind);
+
         %met_sum_pop
         temp_str = get(handles.met_sum_pop,'String');
         I = strcmp(fls.andMethod,temp_str);
@@ -387,13 +401,21 @@ function wyn_pop_Callback(hObject, eventdata, handles)
 nazwa = handles.nazwa;
     fls = readfis(nazwa);
 str = get(handles.wyn_pop,'String');
-val = get(handles.wyn_pop,'Value');
-str = str{val};
-if strcmp(str,'min')
-fls.impMethod = str;
+
+if strcmp(fls.type,'mamdani')
+
+    val = get(handles.wyn_pop,'Value');
+    str = str{val};
+    if strcmp(str,'min')
+    fls.impMethod = str;
+    else
+        fls.impMethod = 'prod';
+    end
 else
     fls.impMethod = 'prod';
+    set(handles.wyn_pop,'Value',2);
 end
+
  writefis(fls,nazwa);
  guidata(hObject,handles);
 
@@ -411,12 +433,23 @@ function zbier_pop_Callback(hObject, eventdata, handles)
 nazwa = handles.nazwa;
     fls = readfis(nazwa);
 str = get(handles.zbier_pop,'String');
-val = get(handles.zbier_pop,'Value');
-str = str{val};
-if strcmp(str,'max')
-    fls.aggMethod = str;
+if strcmp(fls.type,'mamdani')
+
+    val = get(handles.zbier_pop,'Value');
+    str = str{val};
+
+
+    if strcmp(str,'max')
+        fls.aggMethod = str;
+    elseif strcmp(str,'probor')
+        fls.aggMethod = 'probor';
+    else
+        fls.aggMethod='sum';
+    end
 else
-    fls.aggMethod = 'probor';
+    fls.aggMethod = 'sum';
+    set(handles.zbier_pop,'Value',3);
+
 end
 writefis(fls,nazwa);
 guidata(hObject,handles);
@@ -450,6 +483,52 @@ str = str{val};
 writefis(fls,nazwa);
 guidata(hObject,handles);
   
+
+
+% --- Executes on selection change in typ_fis_txt.
+function typ_fis_txt_Callback(hObject, eventdata, handles)
+    nazwa = handles.nazwa;
+    fls = readfis(nazwa);
+    str = get(handles.typ_fis_txt,'String');
+val = get(handles.typ_fis_txt,'Value');
+str = str{val};
+IleWyjsc=length(fls.output);
+if strcmp(str,'mamdani')
+    fls.type = str;
+    
+else
+    fls.type = 'sugeno';
+    set(handles.zbier_pop,'Value',3);%agregacja/zbieranie: sum
+    set(handles.wyn_pop,'Value',2);%implikacja: prod
+    
+    
+    
+end
+fls.rule=[];
+fls.output=[];
+if IleWyjsc>0
+    fls=dodajzmiennatypu2(fls,'output','wyjscie1',[0 1]);
+end
+if IleWyjsc>1
+    fls=dodajzmiennatypu2(fls,'output','wyjscie2',[0 1]);
+end
+
+writefis(fls,nazwa);
+
+guidata(hObject,handles);
+
+% --- Executes during object creation, after setting all properties.
+function typ_fis_txt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to typ_fis_txt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
 %% POLA TEKSTOWE
 
  function naz_fis_txt_Callback(hObject, eventdata, handles)
@@ -578,6 +657,7 @@ glowne_CloseRequestFcn(hObject, eventdata, handles);
 %%%%% Zamykanie Gui
 %%%%% Executes when user attempts to close glowne.
 function glowne_CloseRequestFcn(hObject, eventdata, handles)
+selection = questdlg('Czy chcesz zapisaæ przebieg pracy?','Close Request Function','Tak','Nie','Anuluj','Anuluj');
 nazwa = handles.nazwa;
 fls = readfis(nazwa);
     switch selection

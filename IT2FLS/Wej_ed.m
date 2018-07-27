@@ -160,8 +160,15 @@ handles.output = hObject;
         end
     end        
         
-        
+   if strcmp(fls.type, 'sugeno')
        
+       set(handles.Wyjscia_ed_pop,'visible','off')
+       set(handles.Wyjscia_rysuj,'visible','off')
+       set(handles.text11,'visible','off')
+       
+       
+   end
+   
     %pomocnicza wartosc okresljaca ktore wejscie
     %poczatkowo 1
 

@@ -120,12 +120,20 @@ elseif strcmp(lower(varType),'output'),
             out.output(index).mf(id).params = MfParams{1}(id,:);
            end
        else 
-            out.output(index).mf = struct('name',cell(1,3),'type','constant','params',[]);
-            for id = 1:3
-               out.output(index).mf(id).name   = sprintf('mf%i',id);
-               out.output(index).mf(id).params = [da da]; % **
-               da = da + 0.5;
-            end
+%           nowa wersja
+        out.output(index).mf = struct('name',cell(1),'type','linear','params',[]);
+        out.output(index).mf(1).name   = 'mf0';
+        out.output(index).mf(1).params = [0 0 0 0 0];
+            %fis = addmf(fis,'output',index,'mf0','linear',0);
+
+
+%            stara wersja
+%             out.output(index).mf = struct('name',cell(1,3),'type','constant','params',[]);
+%             for id = 1:3
+%                out.output(index).mf(id).name   = sprintf('mf%i',id);
+%                out.output(index).mf(id).params = [da da]; % **
+%                da = da + 0.5;
+%             end
        end
    end
    % Wstawianie kolumny do listy regul

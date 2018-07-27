@@ -22,7 +22,7 @@ function varargout = Dodawanie_wejsc(varargin)
 
 % Edit the above text to modify the response to help Dodawanie_wejsc
 
-% Last Modified by GUIDE v2.5 14-Nov-2013 19:20:56
+% Last Modified by GUIDE v2.5 06-Jul-2018 18:29:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -158,12 +158,7 @@ function dod_wej_Callback(hObject, eventdata, handles)
     handles = guidata(hObject);
     fls = readfis(handles.nazwa); %odczytanie fis
     fls=dodajzmiennatypu2(fls,'input',['wejscie',num2str(length(fls.input)+1)],[0 1]); %dodawanie jednego wejscia wiecej
-    %dodawanie w regulach wartosci antecedent
-    if ~isempty(fls.rule)
 
-            fls.rule.antecedent = [fls.rule.antecedent zeros(length(fls.rule.antecedent),1)];
-
-    end
     writefis(fls,fls.name); % zapis
 
     dodany_string = ['wejscie ', num2str(length(fls.input))]; %string dodanego wejscia
