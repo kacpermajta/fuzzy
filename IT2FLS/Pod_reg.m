@@ -117,6 +117,7 @@ end
 
 
 % --- Executes just before Pod_reg is made visible.
+
 function Pod_reg_OpeningFcn(hObject, eventdata, handles, varargin)
 
 if isempty(varargin)
@@ -516,6 +517,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes Pod_reg wait for user response (see UIRESUME)
 % uiwait(handles.pod);
+
 function Przerysuj_linie(hObject,eventdata,handles)
 
 %wczytanie danych
@@ -711,7 +713,10 @@ IleReg = length(fls.rule);
             wy2x = linspace(zakres1*100,zakres2*100,404);
         end        
 
-   
+        Z_ob = zeros(IleWyjsc, IleReg);
+        Z_full=Z_ob;
+        
+        
    %rysowanie regul
         for i = 1:IleReg
             
@@ -840,14 +845,58 @@ IleReg = length(fls.rule);
 
                          
                          for j = 1:IleWyjsc
-                       
                           wy(j) = fls.rule(i).consequent(j);
                         
                                     patch([oknowyL(j) oknowyL(j) ...
                                     oknowyP(j) oknowyP(j)], ...
                                     [oknoD-skok_y*(i-1) oknoG-skok_y*(i-1) ...
-                                    oknoG-skok_y*(i-1) oknoD-skok_y*(i-1)],wyjCol); 
+                                    oknoG-skok_y*(i-1) oknoD-skok_y*(i-1)],wyjCol);
+%sugeno- wartosci dla pojedynczych regul                                
+                         if strcmp(fls.type, 'sugeno')   
+        parametr = fls.output(j).mf(wy(j)).params;
 
+        we1=get(handles.wej1_wart,'Value');
+        we1f=fls.input(1).range(2);
+
+        if IleWejsc>1
+           we2=get(handles.wej2_wart,'Value');
+           we2f=fls.input(2).range(2);
+        else
+           we2= 0;
+           we2f= 0;
+
+        end
+
+        if IleWejsc>2
+           we3=get(handles.wej3_wart,'Value');
+           we3f=fls.input(2).range(2);
+        else
+           we3= 0;
+           we3f= 0;
+       end
+
+        if IleWejsc>3
+            we4=get(handles.wej4_wart,'Value');
+            we4f=fls.input(2).range(2);
+       else
+           we4= 0;
+           we4f= 0;
+        end
+
+
+
+
+        Z_ob(j, i) = parametr(1)*we1+ parametr(2)*we2+ parametr(3)*we3+parametr(4)*we4+ parametr(5);
+        Z_full(j, i) = parametr(1)*we1f+ parametr(2)*we2f+ parametr(3)*we3f+parametr(4)*we4f+ parametr(5);
+
+
+        we1=get(handles.wej1_wart,'Value');
+        we2=get(handles.wej2_wart,'Value');
+        we3=get(handles.wej3_wart,'Value');
+        we4=get(handles.wej4_wart,'Value');
+
+                            %[Z_ob(i,j,:)] = parametr(length(parametr))+parametr(1)*x1Sg+ parametr(2)*x2Sg;
+                         else
                                    %funkcja przynaleznosci - rys          
                                    parametr = fls.output(j).mf(wy(j)).params*100;
                                    typ = fls.output(j).mf(wy(j)).type;
@@ -902,9 +951,10 @@ IleReg = length(fls.rule);
                                     patch(X,Y,Col,'EdgeLighting','gouraud','LineWidth',1);
                                     hold on;
                 
+                         end
                          end  
                                            
-                                 
+                              
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                  Obliczenia fls2
                   %pobieranie wartosci z zadajnika slider i przeskalowanie
@@ -1146,7 +1196,17 @@ IleReg = length(fls.rule);
                                
                             end
                         end
-                             
+%sugeno line y
+                         if strcmp(fls.type, 'sugeno')
+
+                         Y_ob2(k,i,1) = min_dolna(k,i)*oknoWys+oknoD-(i-1)*skok_y;
+                         Y_ob2(k,i,2) = min_gorna(k,i)*oknoWys+oknoD-(i-1)*skok_y;
+                         
+                         %X_ob2(k,i) = 50*skok_x/100+krL+(skok_x+2)*(IleWejsc+k-1);
+
+                         %line2 = line([X_ob2(k,i) X_ob2(k,i)],[Y_ob2(k,i,1) Y_ob2(k,i,2)],'Color','b','LineWidth',2); 
+
+                         else
                              if strcmp(fls.impMethod,'min')
                                 if k==1
                                     x=wy1x;
@@ -1163,7 +1223,7 @@ IleReg = length(fls.rule);
                                 end
                             [X_ob(k,:), Y_ob(k,:)] = prod_plot_bs(x, min_dolna(k,i), min_gorna(k,i),mf_dolna_wyj(k,:),mf_gorna_wyj(k,:));                            
                              end
-                        
+                             
                             
                              %wpisanie do macierzy wynikow przed skalowaniem
                                 X_ob_mac(i,:,k) = X_ob(k,:);    %k- wyjscie, i-regula
@@ -1180,13 +1240,22 @@ IleReg = length(fls.rule);
                                 Y_ob2(k,:) = downsample(Y_ob(k,:),8);
                                 Y_ob2(k,:) = Y_ob2(k,:)*oknoWys+oknoD-(i-1)*skok_y;
 
+                              
+                                
                                 patch(X_ob2(k,:),Y_ob2(k,:),'b');
                                 hold on;
                             
-                            
+                        end
                        end
+                       
         end
-
+        for k=1:IleWyjsc
+        
+            Z_temp =Z_ob(k,:);
+            
+            Z_max(k)=max(Z_full(k,:));
+        
+        end
                             
 
 
@@ -1249,14 +1318,52 @@ IleReg = length(fls.rule);
                             
 
              %               Przerysuj_linie(hObject,dlin,handles);
-                    
+             outputString=[];
              for k=1:IleWyjsc
-                 
                         %rysowanie patch'a na dole wynikowego
                         patch([krL krL krP krP], ...
                                [oknoD-skok_y*(IleReg + k) oknoG-skok_y*(IleReg + k) ...
                                 oknoG-skok_y*(IleReg + k) oknoD-skok_y*(IleReg + k)],obCol);
                             
+%wersja sugeno                            
+                        if strcmp(fls.type, 'sugeno')   
+        for i=1:IleReg
+
+            X_ob2(k,i) = Z_ob(k,i)*skok_x/Z_max(k)+krL+(skok_x+2)*(IleWejsc+k-1);
+
+            line2 = line([X_ob2(k,i) X_ob2(k,i)],[Y_ob2(k,i,1) Y_ob2(k,i,2)],'Color','b','LineWidth',2); 
+
+
+            Xagg_ob2(k,i) = Z_ob(k,i)*(krP - krL)/Z_max(k)+krL;
+
+
+            Yagg_ob2(k,i,1) = min_dolna(k,i)*(oknoWys)+oknoD-(IleReg+k)*skok_y;
+            Yagg_ob2(k,i,2) = min_gorna(k,i)*(oknoWys)+oknoD-(IleReg+k)*skok_y;
+
+
+            %Yagg_ob = Y_ob2*(oknoWys)+oknoD-(IleReg+k)*skok_y;
+
+            line2 = line([Xagg_ob2(k,i) Xagg_ob2(k,i)],[Yagg_ob2(k,i,1) Yagg_ob2(k,i,2)],'Color','b','LineWidth',3); 
+
+        end
+
+        if IleReg == 1
+            l_out = Z_ob(k);
+            r_out = Z_ob(k);
+        else
+
+%                                     temp1=Z_ob(k,:);
+%                                     temp2=min_dolna(k,:);
+%                                     temp3=min_gorna(k,:);
+
+            [Xagg_ob, Yagg_ob] = sug_agg(Z_ob(k,:),min_dolna(k,:),min_gorna(k,:));
+            l_out = Xagg_ob;
+            r_out = Yagg_ob;
+        end
+
+        out(k) = mean([l_out r_out]);
+
+                        else
                             if strcmp(fls.aggMethod,'max')
                                 if IleReg == 1
                                 Xagg_ob = X_ob_mac(:,:,k);
@@ -1270,6 +1377,13 @@ IleReg = length(fls.rule);
                                 Yagg_ob = Y_ob_mac(:,:,k);
                                 else
                                 [Xagg_ob, Yagg_ob] = probor_agg(X_ob_mac(:,:,k),Y_ob_mac(:,:,k));
+                                end
+                            elseif strcmp(fls.aggMethod,'sum')
+                                if IleReg == 1
+                                Xagg_ob = X_ob_mac(:,:,k);
+                                Yagg_ob = Y_ob_mac(:,:,k);
+                                else
+                                [Xagg_ob, Yagg_ob] = sum_agg(X_ob_mac(:,:,k),Y_ob_mac(:,:,k));
                                 end
                             end
                                x_do_wyj = Xagg_ob;
@@ -1494,8 +1608,10 @@ IleReg = length(fls.rule);
                          odpCol = [1 1 0.5];
                          line([out(k)*100 out(k)*100], [oknoD-3-skok_y*(IleReg+k) oknoG+1-skok_y*(IleReg+k)],'Color',odpCol,'LineWidth',3);
                          %tekstowo wartosc wyjscia
-                         set(handles.wyj_wart,'String',num2str(out(k)));
-                         
+                         %outputString=[outputString '; ' num2str(out(k))];
+                         %set(handles.wyj_wart,'String',num2str(out(k)));
+                        end
+                        outputString=[outputString '; ' num2str(out(k))];
                          %Ile Regul
                          IleRegul = length(fls.rule);
        
@@ -1503,8 +1619,11 @@ IleReg = length(fls.rule);
                          handles.lin1Yd = oknoD-oknoWys*(IleRegul);
 
                          guidata(hObject,handles);
-                         Przerysuj_linie(hObject,dlin,handles);
+                         
              end
+             outputString=outputString(2:end);
+             set(handles.wyj_wart,'String',outputString);
+             Przerysuj_linie(hObject,dlin,handles);
                                            
 
 % --- Outputs from this function are returned to the command line.

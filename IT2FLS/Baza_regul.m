@@ -331,7 +331,8 @@ end
                                  'String','Wiecej', ...
                                     'Tag',nazwa0, ...
                                  'BackgroundColor', [0.7 0.7 0.7], ...
-                                     'Position', [450-90*(i-1) (99-IleWejsc*21) 80 20]);
+                                     'Position', [450-90*(i-1) (99-IleWejsc*21) 80 20], ...
+                                 'Callback', @sugeno_edit_callback);
                     
                                  
             WyInp1Box(i) = uicontrol('Style','edit', ...
@@ -863,48 +864,56 @@ end
                     nazwamf=['mf' num2str(regNo)];
                     fls = addmf(fls,'output',1,nazwamf,'linear',mfMatr1);
 
-                    if IleWyjsc == 2
-                        temp_val6=regNo+1;
-                        temp_str=handles.WyInp0Box2.String;
+        if IleWyjsc == 2
+            temp_val6=regNo+1;
+            temp_str=handles.WyInp0Box2.String;
 
-                        mfMatr2=str2double(temp_str);
-                        str6= [temp_str];
+            mfMatr2=str2double(temp_str);
+            str6= [temp_str];
 
-                        if IleWejsc > 3
-                            temp_str=handles.WyInp4Box2.String;
+            if IleWejsc > 3
+                temp_str=handles.WyInp4Box2.String;
 
-                            mfMatr2 = [str2double(temp_str) mfMatr2];
-                            str6= ['(' temp_str ') * ' fls.input(4).name ' + ' str6];
-                        end
+                mfMatr2 = [str2double(temp_str) mfMatr2];
+                str6= ['(' temp_str ') * ' fls.input(4).name ' + ' str6];
+            else
+            mfMatr2 = [0 mfMatr2];
 
-
-                        if IleWejsc > 2
-                            temp_str=handles.WyInp3Box2.String;
-                            mfMatr2 = [str2double(temp_str) mfMatr2];
-                            str6= ['(' temp_str ') * ' fls.input(3).name ' + ' str6];
-                        end
+            end
 
 
-                        if IleWejsc > 1
-                            temp_str=handles.WyInp2Box2.String;
+            if IleWejsc > 2
+                temp_str=handles.WyInp3Box2.String;
+                mfMatr2 = [str2double(temp_str) mfMatr2];
+                str6= ['(' temp_str ') * ' fls.input(3).name ' + ' str6];
+            else
+            mfMatr2 = [0 mfMatr2];
 
-                            mfMatr2 = [ str2double(temp_str) mfMatr2];
-                            str6= ['(' temp_str ') * ' fls.input(2).name ' + ' str6];
-                        end
-
-                        temp_str=handles.WyInp1Box2.String;
-                        mfMatr2 = [ str2double(temp_str) mfMatr2];
-                        str6= ['(' temp_str ') * ' fls.input(1).name ' + ' str6];
+            end
 
 
+            if IleWejsc > 1
+                temp_str=handles.WyInp2Box2.String;
+
+                mfMatr2 = [ str2double(temp_str) mfMatr2];
+                str6= ['(' temp_str ') * ' fls.input(2).name ' + ' str6];
+            else
+            mfMatr2 = [0 mfMatr2];
+            end
+
+            temp_str=handles.WyInp1Box2.String;
+            mfMatr2 = [ str2double(temp_str) mfMatr2];
+            str6= ['(' temp_str ') * ' fls.input(1).name ' + ' str6];
 
 
 
 
 
-                        nazwamf=['mf' num2str(regNo)];
-                        fls = addmf(fls,'output',2,nazwamf,'linear',mfMatr2);
-                    end
+
+
+            nazwamf=['mf' num2str(regNo)];
+            fls = addmf(fls,'output',2,nazwamf,'linear',mfMatr2);
+        end
                     
                 end
        
@@ -1136,13 +1145,71 @@ function uipanel1_SelectionChangeFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
+function sugeno_edit_callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
+nazwa = handles.nazwa;
+fls = readfis(nazwa);
+
+if strcmp(fls.type, 'sugeno')
+    IleWejsc=length(fls.input);
+
+    definicja= define(nazwa);
+    
+    waitfor(definicja);
+
+    e = getappdata(0,'evalue');
+    setappdata(0,'evalue',0);
+    if e(1)~=0
+        
+        if strcmp(hObject.Tag,  'WyLiBox1')
+
+            handles.WyInp0Box1.String = e(2);
+            handles.WyInp1Box1.String = e(3);
+            handles.WyInp2Box1.String = e(4);
+            if IleWejsc >2
+                handles.WyInp3Box1.String = e(5);
+                if IleWejsc >3
+                    handles.WyInp4Box1.String = e(6);
+                end
+            end
+
+
+         else
+
+
+
+
+            handles.WyInp0Box2.String = e(2);
+            handles.WyInp1Box2.String = e(3);
+            handles.WyInp2Box2.String = e(4);
+            if IleWejsc >2
+                handles.WyInp3Box2.String = e(5);
+                if IleWejsc >3
+                    handles.WyInp4Box2.String = e(6);
+                end
+            end
+        end
+    end
+    
+end
+
 % --- Executes on button press in pushbutton1.
 function WyLiBox1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
+
+
+
+
 function WyLiBox2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+

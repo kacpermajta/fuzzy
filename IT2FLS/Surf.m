@@ -601,11 +601,11 @@ end
 
                                            %funkcja przynaleznosci - rys
                                            parametr = fls.input(KtWejscie1).mf(we1).params;
-                                           [dolnaz,gornaz] = feval(typ,we2x,parametr);
+                                           [dolnaz,gornaz] = feval(typ,we1x,parametr);
                             %generowanie gornego i dolnego przebiegu
                             %zslices                           
-                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m);
-                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m);
+                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m+1);
+                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m+1);
                                             %wartosci potrzebne do obliczen
                                             mf_dolna1(i,:) = dolna;
 
@@ -622,28 +622,28 @@ end
                                        [dolnaz,gornaz] = feval(typ,we2x,parametr);
                             %generowanie gornego i dolnego przebiegu
                             %zslices                               
-                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m);
-                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m);
+                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m+1);
+                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m+1);
                                             %wartosci potrzebne do obliczen
                                             mf_dolna2(i,:) = dolna;
 
                                             mf_gorna2(i,:) = gorna;
                                             
+                                if strcmp(fls.type, 'mamdani')
 
 
-
-                                wy1 = fls.rule(i).consequent(KtWyjscie);
-                                typ = fls.output(KtWyjscie).mf(wy1).type;
+                                    wy1 = fls.rule(i).consequent(KtWyjscie);
+                                    typ = fls.output(KtWyjscie).mf(wy1).type;
 
                                            %funkcja przynaleznosci - rys          
                                            parametr = fls.output(KtWyjscie).mf(wy1).params;
 
-                                           [dolna,gorna] = feval(typ,wy1x,parametr);
+                                           [dolnaz,gornaz] = feval(typ,wy1x,parametr);
 
                             %generowanie gornego i dolnego przebiegu
                             %zslices                               
-                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m);
-                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m);
+                                             dolna = mean([dolnaz; gornaz],1)+(mean([dolnaz; gornaz],1)-dolnaz)*1/zslices_num*(zslices_num-m+1);
+                                             gorna = mean([dolnaz; gornaz],1)-(gornaz - mean([dolnaz; gornaz],1))*1/zslices_num*(zslices_num-m+1);
 
                                              mf_dolna_wyj(i,:) = dolna;
                                            mf_gorna_wyj(i,:) = gorna;
@@ -661,7 +661,7 @@ end
                                             min_dolna = min_gorna;
                                             min_gorna = temp;
                                         end
-                                    [X_ob(i,:), Y_ob(i,:)] = min_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
+                                    [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
 
 
                                     %wpisanie do macierzy wynikow przed skalowaniem
@@ -679,73 +679,119 @@ end
                                     [X_ob(i,:), Y_ob(i,:)] = and_plot_bs(grid_x, min_dolna(i,:), min_gorna(i,:),mf_dolna_wyj(i,:),mf_gorna_wyj(i,:));
 
                                 end
-                            
+                             else
+%sugeno
+                                    wy1 = fls.rule(i).consequent(KtWyjscie);
+                                    typ = linear;
+
+                                               %funkcja przynaleznosci - rys          
+                                    parametr = fls.output(KtWyjscie).mf(wy1).params;
+
+                                    x1Sg=we1x(j);
+                                    x2Sg=we2x(k);
+
+                                    if strcmp(fls.andMethod,'min')
+                                        [wart_dolna(i,:), wart_gorna(i,:)] = min_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+                                        %wpisanie do macierzy wynikow przed skalowaniem
+
+                                    elseif strcmp(fls.andMethod,'prod')
+                                        [wart_dolna(i,:), wart_gorna(i,:)] =   prod_and(j,k,mf_dolna1(i,:),mf_gorna1(i,:),mf_dolna2(i,:),mf_gorna2(i,:));
+
+                                    end %koniec andmethod == min 
+                                    if wart_dolna > wart_gorna
+                                        temp = wart_dolna;
+                                        wart_dolna = wart_gorna;
+                                        wart_gorna = temp;
+                                    end
+
+
+                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(1)*x1Sg+ parametr(2)*x2Sg;
+
+                                        
+                                    
+                                end
                             
                             end %ilereg
                             
 
 
 %Agregacja
-                            if strcmp(fls.aggMethod,'max')
+                            if strcmp(fls.type, 'sugeno')
                                 if IleReg == 1
-                                    x_do_wyj = X_ob;
-                                    y_do_wyj = Y_ob;
+                                    l_out = Z_ob;
+                                    r_out = Z_ob;
                                 else
-                                    [Xagg_ob, Yagg_ob] = max_agg(X_ob,Y_ob);
-                                    x_do_wyj = Xagg_ob;
-                                    y_do_wyj = Yagg_ob;
+                                    
+                                    
+                                    [Xagg_ob, Yagg_ob] = sug_agg(Z_ob,wart_dolna,wart_gorna);
+                                    l_out = Xagg_ob;
+                                    r_out = Yagg_ob;
+
                                 end
-                            elseif strcmp(fls.aggMethod,'prod')
-                                 if IleReg == 1
-                                    x_do_wyj = X_ob;
-                                    y_do_wyj = Y_ob;
-                                else
-                                    [Xagg_ob, Yagg_ob] = prod_agg(X_ob,Y_ob);
-                                    x_do_wyj = Xagg_ob;
-                                    y_do_wyj = Yagg_ob;
+  
+                            else
+
+
+                                if strcmp(fls.aggMethod,'max')
+                                    if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = max_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
+                                elseif strcmp(fls.aggMethod,'prod')
+                                     if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = prod_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
+                                elseif strcmp(fls.aggMethod,'sum')
+                                     if IleReg == 1
+                                        x_do_wyj = X_ob;
+                                        y_do_wyj = Y_ob;
+                                    else
+                                        [Xagg_ob, Yagg_ob] = sum_agg(X_ob,Y_ob);
+                                        x_do_wyj = Xagg_ob;
+                                        y_do_wyj = Yagg_ob;
+                                    end
                                 end
-                            elseif strcmp(fls.aggMethod,'sum')
-                                 if IleReg == 1
-                                    x_do_wyj = X_ob;
-                                    y_do_wyj = Y_ob;
-                                else
-                                    [Xagg_ob, Yagg_ob] = sum_agg(X_ob,Y_ob);
-                                    x_do_wyj = Xagg_ob;
-                                    y_do_wyj = Yagg_ob;
-                                end
-                            end
 
-                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%defuzyfikacja
-                            %wybor metody defuzzyfikacji
-                            %pobranie wart. wyboru  DOEDYCJI
-                            %tworzenie danych potrzebnych do defuzzyfikacji
+                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %defuzyfikacja
+                                %wybor metody defuzzyfikacji
+                                %pobranie wart. wyboru  DOEDYCJI
+                                %tworzenie danych potrzebnych do defuzzyfikacji
 
-                            %z = x_do_wyj(1:length(x_do_wyj)/2);
-                            %z = z';
-                            z = linspace(rang_z(1),rang_z(2),length(x_do_wyj)/2);
+                                %z = x_do_wyj(1:length(x_do_wyj)/2);
+                                %z = z';
+                                z = linspace(rang_z(1),rang_z(2),length(x_do_wyj)/2);
 
-                            y_do_wyj = y_do_wyj';
-                            len_y = length(y_do_wyj);
-                            %centra (srednia obliczanych wartosci) = w i rozrzut
-                            %(spread) = delta
-                            %for l = 1:length(z)
-                                w(1,:) = y_do_wyj(1:len_y/2);
-                                w(2,:) = y_do_wyj(len_y/2+1:end) ; 
-                             
-                            %end
-                            w(2,:) = fliplr(w(2,:));
-                            w = mean(w,1);
-                   
-                            delta = w(1,:)' - y_do_wyj(1:length(z)); 
+                                y_do_wyj = y_do_wyj';
+                                len_y = length(y_do_wyj);
+                                %centra (srednia obliczanych wartosci) = w i rozrzut
+                                %(spread) = delta
+                                %for l = 1:length(z)
+                                    w(1,:) = y_do_wyj(1:len_y/2);
+                                    w(2,:) = y_do_wyj(len_y/2+1:end) ; 
 
-                            delta = delta';
+                                %end
+                                w(2,:) = fliplr(w(2,:));
+                                w = mean(w,1);
+
+                                delta = w(1,:)' - y_do_wyj(1:length(z)); 
+
+                                delta = delta';
 
 
                                 %okreslenei wartosci
 
                                         [l_out, r_out] = feval(point_fcn,z,w,delta);
-
+                            end
                                     %zapewnienie warunku ze przy niektorych
                                     %danych wartosc out zawsze jest srodkowa
                                     %wartoscia 0.5
