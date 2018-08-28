@@ -485,7 +485,7 @@ end
                 else
     regNo=i+1;
     temp_par=fls.output(1).mf(regNo).params;
-    str5= [num2str(temp_par(5))];
+    str5= [num2str(temp_par(length(temp_par)))];
 
     if IleWejsc > 3
         str5= ['(' num2str(temp_par(4)) ') * ' fls.input(4).name ' + ' str5];
@@ -514,7 +514,7 @@ end
 
     if IleWyjsc == 2
         temp_par=fls.output(2).mf(regNo).params;
-        str6= [num2str(temp_par(5))];
+        str6= [num2str(temp_par(length(temp_par)))];
         if IleWejsc > 3
             str6= ['(' num2str(temp_par(4)) ') * ' fls.input(4).name ' + ' str6];
         end
@@ -826,8 +826,7 @@ end
 
                         mfMatr1 = [str2double(temp_str) mfMatr1];
                         str5= ['(' temp_str ') * ' fls.input(4).name ' + ' str5];
-                    else
-                        mfMatr1 = [0 mfMatr1];
+
                     end
 
 
@@ -836,8 +835,7 @@ end
 
                         mfMatr1 = [str2double(temp_str) mfMatr1];
                         str5= ['(' temp_str ') * ' fls.input(3).name ' + ' str5];
-                    else
-                        mfMatr1 = [0 mfMatr1];
+
                     end
 
 
@@ -846,8 +844,6 @@ end
 
                         mfMatr1 = [ str2double(temp_str) mfMatr1];
                         str5= ['(' temp_str ') * ' fls.input(2).name ' + ' str5];
-                    else
-                        mfMatr1 = [0 mfMatr1];
                     end
 
                     temp_str=handles.WyInp1Box1.String;
@@ -876,9 +872,6 @@ end
 
                 mfMatr2 = [str2double(temp_str) mfMatr2];
                 str6= ['(' temp_str ') * ' fls.input(4).name ' + ' str6];
-            else
-            mfMatr2 = [0 mfMatr2];
-
             end
 
 
@@ -886,8 +879,6 @@ end
                 temp_str=handles.WyInp3Box2.String;
                 mfMatr2 = [str2double(temp_str) mfMatr2];
                 str6= ['(' temp_str ') * ' fls.input(3).name ' + ' str6];
-            else
-            mfMatr2 = [0 mfMatr2];
 
             end
 
@@ -897,8 +888,6 @@ end
 
                 mfMatr2 = [ str2double(temp_str) mfMatr2];
                 str6= ['(' temp_str ') * ' fls.input(2).name ' + ' str6];
-            else
-            mfMatr2 = [0 mfMatr2];
             end
 
             temp_str=handles.WyInp1Box2.String;

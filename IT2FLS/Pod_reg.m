@@ -886,8 +886,17 @@ IleReg = length(fls.rule);
 
 
 
-        Z_ob(j, i) = parametr(1)*we1+ parametr(2)*we2+ parametr(3)*we3+parametr(4)*we4+ parametr(5);
-        Z_full(j, i) = parametr(1)*we1f+ parametr(2)*we2f+ parametr(3)*we3f+parametr(4)*we4f+ parametr(5);
+        Z_ob(j, i) = parametr(1)*we1+ parametr(2)*we2+ parametr(length(parametr));
+        Z_full(j, i) = parametr(1)*we1f+ parametr(2)*we2f+ parametr(length(parametr));
+        
+        if IleWejsc>2
+        Z_ob(j, i) = Z_ob(j, i)+ parametr(3)*we3;
+        Z_full(j, i) = Z_full(j, i)+ parametr(3)*we3f;
+            if IleWejsc>3
+                 Z_ob(j, i) = Z_ob(j, i)+parametr(4)*we4
+                  Z_full(j, i) = Z_full(j, i)+parametr(4)*we4f
+            end
+        end
 
 
         we1=get(handles.wej1_wart,'Value');

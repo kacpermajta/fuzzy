@@ -153,13 +153,18 @@ end
     end
     lista_metod = cellstr(lista_metod2);
     
-    set(handles.defuz_pop,'String',lista_metod);
-    temp_val = get(handles.defuz_pop,'Value');
-    temp_str = get(handles.defuz_pop,'String');
-    str = temp_str{temp_val};
-   
-    fls.defuzzMethod = str;
     
+    if strcmp(fls.type,'mamdani')
+        set(handles.defuz_pop,'String',lista_metod);
+        temp_val = get(handles.defuz_pop,'Value');
+        temp_str = get(handles.defuz_pop,'String');
+        str = temp_str{temp_val};
+
+        fls.defuzzMethod = str;
+    else
+        fls.defuzzMethod ='wtaver';
+    end
+        
  %%%%%zbier_pop
     temp_val = get(handles.zbier_pop,'Value');
     temp_str = get(handles.zbier_pop,'String');
@@ -471,7 +476,9 @@ nazwa = handles.nazwa;
 val = get(handles.defuz_pop,'Value');
 str = str{val};
 % if strcmp(str,'centroid')
+if strcmp(fls.type,'mamdani')
  fls.defuzzMethod = str;
+end
 % elseif strcmp(str,'csum')
 %     fls.defuzzMethod = 'csum';
 % elseif strcmp(str,'cos')
@@ -498,9 +505,9 @@ if strcmp(str,'mamdani')
     
 else
     fls.type = 'sugeno';
+    fls.defuzzMethod ='wtaver';
     set(handles.zbier_pop,'Value',3);%agregacja/zbieranie: sum
     set(handles.wyn_pop,'Value',2);%implikacja: prod
-    
     
     
 end

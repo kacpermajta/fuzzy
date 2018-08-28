@@ -123,7 +123,11 @@ elseif strcmp(lower(varType),'output'),
 %           nowa wersja
         out.output(index).mf = struct('name',cell(1),'type','linear','params',[]);
         out.output(index).mf(1).name   = 'mf0';
-        out.output(index).mf(1).params = [0 0 0 0 0];
+        
+        
+        out.output(index).mf(1).params = zeros(length(fis.input)+1, 1);
+        
+        
             %fis = addmf(fis,'output',index,'mf0','linear',0);
 
 

@@ -493,7 +493,7 @@ end
                                     end
 
 
-                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(1)*x1Sg+ parametr(2)*x2Sg;
+                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(KtWejscie1)*x1Sg+ parametr(KtWejscie2)*x2Sg;
 
                                         
                                     
@@ -705,7 +705,7 @@ end
                                     end
 
 
-                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(1)*x1Sg+ parametr(2)*x2Sg;
+                                        [Z_ob(i,:)] = parametr(length(parametr))+parametr(KtWejscie1)*x1Sg+ parametr(KtWejscie2)*x2Sg;
 
                                         
                                     
