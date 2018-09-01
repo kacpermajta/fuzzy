@@ -503,6 +503,11 @@ IleWyjsc=length(fls.output);
 if strcmp(str,'mamdani')
     fls.type = str;
     
+    temp_val = get(handles.defuz_pop,'Value');
+    temp_str = get(handles.defuz_pop,'String');
+    str = temp_str{temp_val};
+
+    fls.defuzzMethod = str;
 else
     fls.type = 'sugeno';
     fls.defuzzMethod ='wtaver';

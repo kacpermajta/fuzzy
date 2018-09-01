@@ -857,44 +857,84 @@ IleReg = length(fls.rule);
 
         we1=get(handles.wej1_wart,'Value');
         we1f=fls.input(1).range(2);
+        we1l=fls.input(1).range(1);
+
+
 
         if IleWejsc>1
-           we2=get(handles.wej2_wart,'Value');
-           we2f=fls.input(2).range(2);
-        else
-           we2= 0;
-           we2f= 0;
+            we2=get(handles.wej2_wart,'Value');
+            we2f=fls.input(2).range(2);
+            we2l=fls.input(2).range(1);
 
-        end
+       end
+
 
         if IleWejsc>2
            we3=get(handles.wej3_wart,'Value');
            we3f=fls.input(2).range(2);
-        else
-           we3= 0;
-           we3f= 0;
+           we3l=fls.input(2).range(1);
+
        end
 
         if IleWejsc>3
             we4=get(handles.wej4_wart,'Value');
             we4f=fls.input(2).range(2);
-       else
-           we4= 0;
-           we4f= 0;
+            we4l=fls.input(2).range(1);
         end
 
 
 
 
         Z_ob(j, i) = parametr(1)*we1+ parametr(2)*we2+ parametr(length(parametr));
-        Z_full(j, i) = parametr(1)*we1f+ parametr(2)*we2f+ parametr(length(parametr));
+        Z_full(j, i) =parametr(length(parametr));
+        Z_low(j, i) =parametr(length(parametr));
+        
+        
+        if parametr(1)>0
+            Z_full(j, i) = Z_full(j, i)+parametr(1)*we1f;
+            Z_low(j, i) = Z_low(j, i)+parametr(1)*we1l;
+        else
+            Z_full(j, i) = Z_full(j, i)+parametr(1)*we1l;
+            Z_low(j, i) = Z_low(j, i)+parametr(1)*we1f;
+           
+        end
+        if parametr(2)>0
+            Z_full(j, i) = Z_full(j, i)+parametr(2)*we2f;
+            Z_low(j, i) = Z_low(j, i)+parametr(2)*we2l;
+        else
+            Z_full(j, i) = Z_full(j, i)+parametr(2)*we2l;
+            Z_low(j, i) = Z_low(j, i)+parametr(2)*we2f;
+           
+        end
+        
+ %       Z_full(j, i) = Z_full(j, i)+parametr(1)*we1f+ parametr(2)*we2f+ parametr(length(parametr));
         
         if IleWejsc>2
-        Z_ob(j, i) = Z_ob(j, i)+ parametr(3)*we3;
-        Z_full(j, i) = Z_full(j, i)+ parametr(3)*we3f;
+            Z_ob(j, i) = Z_ob(j, i)+ parametr(3)*we3;
+       %     Z_full(j, i) = Z_full(j, i)+ parametr(3)*we3f;
+
+            if parametr(3)>0
+                Z_full(j, i) = Z_full(j, i)+parametr(3)*we3f;
+                Z_low(j, i) = Z_low(j, i)+parametr(3)*we3l;
+            else
+                Z_full(j, i) = Z_full(j, i)+parametr(3)*we3l;
+                Z_low(j, i) = Z_low(j, i)+parametr(3)*we3f;
+
+            end
+ 
             if IleWejsc>3
-                 Z_ob(j, i) = Z_ob(j, i)+parametr(4)*we4
-                  Z_full(j, i) = Z_full(j, i)+parametr(4)*we4f
+                 Z_ob(j, i) = Z_ob(j, i)+parametr(4)*we4;
+                 
+                 if parametr(4)>0
+                    Z_full(j, i) = Z_full(j, i)+parametr(4)*we3f;
+                    Z_low(j, i) = Z_low(j, i)+parametr(4)*we3l;
+                else
+                    Z_full(j, i) = Z_full(j, i)+parametr(4)*we3l;
+                    Z_low(j, i) = Z_low(j, i)+parametr(4)*we3f;
+
+                end
+
+                  %Z_full(j, i) = Z_full(j, i)+parametr(4)*we4f
             end
         end
 
@@ -1263,6 +1303,7 @@ IleReg = length(fls.rule);
             Z_temp =Z_ob(k,:);
             
             Z_max(k)=max(Z_full(k,:));
+            Z_min(k)=min(Z_low(k,:));
         
         end
                             
@@ -1338,12 +1379,12 @@ IleReg = length(fls.rule);
                         if strcmp(fls.type, 'sugeno')   
         for i=1:IleReg
 
-            X_ob2(k,i) = Z_ob(k,i)*skok_x/Z_max(k)+krL+(skok_x+2)*(IleWejsc+k-1);
+            X_ob2(k,i) =( Z_ob(k,i)-Z_min(k))*skok_x/(Z_max(k)-Z_min(k))+krL+(skok_x+2)*(IleWejsc+k-1);
 
             line2 = line([X_ob2(k,i) X_ob2(k,i)],[Y_ob2(k,i,1) Y_ob2(k,i,2)],'Color','b','LineWidth',2); 
 
 
-            Xagg_ob2(k,i) = Z_ob(k,i)*(krP - krL)/Z_max(k)+krL;
+            Xagg_ob2(k,i) = (Z_ob(k,i)-Z_min(k))*(krP - krL)/(Z_max(k)-Z_min(k))+krL;
 
 
             Yagg_ob2(k,i,1) = min_dolna(k,i)*(oknoWys)+oknoD-(IleReg+k)*skok_y;
