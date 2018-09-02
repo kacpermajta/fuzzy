@@ -152,10 +152,9 @@ end
         end
     end
     lista_metod = cellstr(lista_metod2);
-    
+    set(handles.defuz_pop,'String',lista_metod);
     
     if strcmp(fls.type,'mamdani')
-        set(handles.defuz_pop,'String',lista_metod);
         temp_val = get(handles.defuz_pop,'Value');
         temp_str = get(handles.defuz_pop,'String');
         str = temp_str{temp_val};
@@ -209,15 +208,20 @@ end
         path_u = path_u(1:end-8);
         path_c = char(path_u);
         cd(path_c);
-        temp_str = get(handles.defuz_pop,'String');
-        I = strcmp(fls.defuzzMethod,temp_str);
-        ind = find(I);
-        set(handles.defuz_pop,'Value',ind); 
-        %zbier_pop
-        temp_str = get(handles.zbier_pop,'String');
-        I = strcmp(fls.aggMethod,temp_str);
-        ind = find(I);
-        set(handles.zbier_pop,'Value',ind);        
+        if strcmp(fls.type,'mamdani')
+            temp_str = get(handles.defuz_pop,'String');
+            I = strcmp(fls.defuzzMethod,temp_str);
+            ind = find(I);
+            set(handles.defuz_pop,'Value',ind); 
+            %zbier_pop
+            temp_str = get(handles.zbier_pop,'String');
+            I = strcmp(fls.aggMethod,temp_str);
+            ind = find(I);
+            set(handles.zbier_pop,'Value',ind); 
+        else
+            set(handles.defuz_pop,'Value',1); 
+            set(handles.zbier_pop,'Value',3); 
+        end
     end
       
 %%%%%ilosc wejsc textbox

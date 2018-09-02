@@ -1298,15 +1298,16 @@ IleReg = length(fls.rule);
                        end
                        
         end
-        for k=1:IleWyjsc
-        
-            Z_temp =Z_ob(k,:);
-            
-            Z_max(k)=max(Z_full(k,:));
-            Z_min(k)=min(Z_low(k,:));
-        
-        end
-                            
+        if strcmp(fls.type, 'sugeno')  
+            for k=1:IleWyjsc
+
+                Z_temp =Z_ob(k,:);
+
+                Z_max(k)=max(Z_full(k,:));
+                Z_min(k)=min(Z_low(k,:));
+
+            end
+        end                 
 
 
                            
